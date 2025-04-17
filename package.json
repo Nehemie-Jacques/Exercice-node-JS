@@ -1,0 +1,25 @@
+{
+  "name": "node-training",
+  "version": "1.0.0",
+  "description": "training in node.js",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Nehemie-Jacques/Exercice-node-JS.git"
+  },
+  "author": "Nehemie",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Nehemie-Jacques/Exercice-node-JS/issues"
+  },
+  "homepage": "https://github.com/Nehemie-Jacques/Exercice-node-JS#readme",
+  "dependencies": {
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.9"
+  }
+}
