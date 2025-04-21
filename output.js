@@ -41,3 +41,11 @@ const server = http.createServer((req, res) => {
 server.listen(port, () => {
     console.log('Le serveur est en cours dexécution')
 })
+
+// Exercice 5
+const EventEmitter  = require('node:events');
+const eventEmitter = new EventEmitter();
+eventEmitter.on('greeting', (name) => {
+  console.log(`Bonjour, ${name}`)
+})
+eventEmitter.emit('greeting', 'Nehemie')
