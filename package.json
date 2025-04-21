@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Nehemie-Jacques/Exercice-node-JS#readme",
   "dependencies": {
+    "body-parse": "^0.1.0",
     "express": "^5.1.0",
     "serve-favicon": "^2.5.0"
   },
