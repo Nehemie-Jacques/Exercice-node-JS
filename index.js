@@ -28,11 +28,30 @@ const express = require("express")
 const morgan = require("morgan")
 // const favicon = require("serve-favicon")
 const bodyParser = require("body-parser")
+const { Sequelize } = require("sequelize")
 const {success, getUniqueId} = require("./helper.js")
 let pokemons = require("./mock-pokemon")
 
 const app = express()
 const port = 3000
+
+const sequelize = new Sequelize ( 
+  'pokemons', // nom de la base de données
+  'root', // nom d'utilisateur
+  '', // mot de passe
+  {
+    host: 'localhost', 
+    dialect: 'mariadb',
+    dialectOptions: {
+      timezone: 'Etc/GMT+1'
+    },
+    logging: false
+  }
+)
+
+sequelize.authenticate()
+  .then(_ => console.log('la connexion à la base de données a bin été établie.'))
+  .catch(error => console.error('Impossible de se connecter à la base de données ${error}')) // Affiche l'erreur si la connexion échoue
 
 app
   // .use(favicon[__dirname + "/favicon.ico"])  
@@ -46,16 +65,15 @@ app
 
 
 app.get('/', (req, res) => res.send("Hello word again and welcome !")); // point de terminaison
-
 app.get("/api/pokemons", (req, res) => {
     const message = "Nous avons obtenu la liste des pokemons"
-    res.json(success(message, pokemons))
+    res.json(success(message, pokemons)) // renvoie la liste des pokemons
 })
 
 app.get("/api/pokemons/:id", (req, res) => {
-  const id = parseInt(req.params.id)
+  const id = parseInt(req.params.id) 
   const message = "Nous avons trouvé bel et bien un pokemon"
-  const pokemon = pokemons.find(pokemon => pokemon.id === id);
+  const pokemon = pokemons.find(pokemon => pokemon.id === id); 
   if (pokemon) {
     res.json(success(message, pokemon))
     // res.send(`vous avez demandé le pokemon n°${pokemon.id} : ${pokemon.name}`);
@@ -64,7 +82,7 @@ app.get("/api/pokemons/:id", (req, res) => {
   }
 })
 
-app.post("/api/pokemons", (req, res) => {
+app.post("/api/pokemons", (req, res) => { // 
   const id = getUniqueId(pokemons)
   const pokemonCreated = { ...req.body, ...{id: id, created: new Date()}}
   pokemons.push(pokemonCreated)

@@ -1,7 +1,7 @@
 // Exercice 1
-const fs = require("fs");
-try {
-  const fileInput = fs.readFileSync(`input.txt`, "utf8");
+const fs = require("fs"); 
+try { 
+  const fileInput = fs.readFileSync(`input.txt`, "utf8"); 
   const message = fileInput.toUpperCase();
   fs.writeFileSync(`output.txt`, message);
   console.log(message);
@@ -11,11 +11,11 @@ try {
 
 // Exercice 2
 const path = require("path")
-let trame = path.join('users', 'categories', 'people', '...', 'hobbies')
+let trame = path.join('users', 'categories', 'people', '...', 'hobbies') // renvoie le chemin absolu
 console.log(trame)
-let frame = path.normalize('users/categories//people/../hobbies')
+let frame = path.normalize('users/categories//people/../hobbies') // renvoie le chemin normalisé
 console.log(frame)
-let chrome = path.dirname('users/categories/people/hobbies')
+let chrome = path.dirname('users/categories/people/hobbies') // renvoie le nom du dossier parent
 console.log(chrome)
 
 // Exercice 3
@@ -30,7 +30,7 @@ console.log("Processeur: " + os.cpus())
 const http = require('http')
 const port = 3000
 const server = http.createServer((req, res) => {
-    if (req.url === '/' ) {
+    if (req.url === '/' ) { // Si l'URL est la racine
         res.statusCode = 200
         res.end('Bienvenu sur ce nouveau serveur')
     } else {
@@ -38,14 +38,15 @@ const server = http.createServer((req, res) => {
         res.end('Error 404 : Page non truvée')
     }
 })
-server.listen(port, () => {
+server.listen(port, () => { // Démarre le serveur
     console.log('Le serveur est en cours dexécution')
 })
 
 // Exercice 5
-const EventEmitter  = require('node:events');
-const eventEmitter = new EventEmitter();
+const EventEmitter  = require('node:events'); 
+const eventEmitter = new EventEmitter(); // Crée une instance de EventEmitter
+// Crée un écouteur d'événement pour l'événement 'greeting'
 eventEmitter.on('greeting', (name) => {
   console.log(`Bonjour, ${name}`)
 })
-eventEmitter.emit('greeting', 'Nehemie')
+eventEmitter.emit('greeting', 'Nehemie') // Émet l'événement 'greeting' avec le nom 'Nehemie'
