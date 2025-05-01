@@ -35,6 +35,7 @@ let pokemons = require("./mock-pokemon")
 const app = express()
 const port = 3000
 
+
 const sequelize = new Sequelize ( 
   'pokemons', // nom de la base de données
   'root', // nom d'utilisateur
