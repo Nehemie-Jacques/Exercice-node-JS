@@ -1,5 +1,4 @@
 const http = require('http');
-// const { Json } = require('sequelize/lib/utils');
 const port = 3000;
 const url = require('url') // Importation du module URL pour annalyser les URL et lire les paramètres
 // Il nous aidera à séparer l'url "/search?q=bonjour" en deux parties : "/search" et "q=bonjour"
@@ -10,7 +9,7 @@ const server = http.createServer((req, res) => {
     const pathname = urlparse.pathname; // Récupération du chemin de l'URL (la premiere partie "/search")
     const query = urlparse.query; // Récupération des paramètres de l'URL (la deuxieme partie "q=bonjour")
     
-    if (pathname === '/') {
+    if (pathname === '/') { // On vérifie si le chemin est "/"
         // res.statusCode = 200;
         res.writeHead(200, { 'content-type': 'text/plain'}); // Le texte est en texte brut
         res.end('Bienvenue sur la notre page dacceuil');

@@ -46,7 +46,7 @@ server.listen(port, () => { // Démarre le serveur
 const EventEmitter  = require('node:events'); 
 const eventEmitter = new EventEmitter(); // Crée une instance de EventEmitter
 // Crée un écouteur d'événement pour l'événement 'greeting'
-eventEmitter.on('greeting', (name) => {
+eventEmitter.on('greeting', (name) => { // Lorsque l'événement 'greeting' est émis, cette fonction sera exécutée
   console.log(`Bonjour, ${name}`)
 })
 eventEmitter.emit('greeting', 'Nehemie') // Émet l'événement 'greeting' avec le nom 'Nehemie'
