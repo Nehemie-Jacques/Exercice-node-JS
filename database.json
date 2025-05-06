@@ -3,5 +3,10 @@
     "name": "Paul",
     "email": "paul@gamil.com",
     "password": "123456"
+  },
+  {
+    "name": "Junior",
+    "email": "junior@gamil.com",
+    "password": "345678"
   }
 ]

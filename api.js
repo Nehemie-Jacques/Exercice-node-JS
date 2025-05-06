@@ -17,6 +17,7 @@ app.get('/users', (req, res) => { // On définit une route HTTP GET appelée /us
     })
 })
 
+// Ajout d'un nouvel utilisateur
 app.post('/users', (req, res) => {
     const { name, email, password} = req.body; // On extrait les données du corps de la requête
 
@@ -41,6 +42,29 @@ app.post('/users', (req, res) => {
             res.status(201).json({ message: 'Utilisateur ajouté avec succès'})
         });
     }); 
+});
+
+// Suppression d'un utilisateur
+app.delete('/users/:email', (req, res) => { // On définit une route HTTP DELETE qui prend un paramètre d'URL :email
+    // Le paramètre :email représente l'email de l'utilisateur à supprimer
+    // On utilise req.params pour accéder aux paramètres de l'URL
+    const email = req.params.email; // On récupère l'email de l'utilisateur à supprimer depuis les paramètres de la requête
+    
+    // On lit le fichier database.json pour récupérer les utilisateurs existants
+    fs.readFile('./database.json', 'utf8', (err, data) => {
+        if (err) throw err; 
+        let database = JSON.parse(data); // On parse le contenu du fichier JSON pour obtenir un tableau d'utilisateurs
+        const newdatabase = database.filter(user => user.email !== email); // On filtre le tableau pour exclure l'utilisateur à supprimer
+
+        if (newdatabase.length === database.length) { // Si la longueur du tableau filtré est égale à celle du tableau d'origine, cela signifie que l'utilisateur n'a pas été trouvé
+            return res.status(404).json({ message: 'Utilisateur non trouvé'});
+        }
+
+        fs.writeFile('./database.json', JSON.stringify(newdatabase), 'utf-8', (err) => {
+            if (err) throw err; 
+            res.status(200).json({ message: 'l\'utilisateur a été supprimé avec succès'});
+        });
+    });
 });
 
 app.listen(3000, () => {
