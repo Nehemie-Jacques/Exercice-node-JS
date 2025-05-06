@@ -18,6 +18,7 @@
   "homepage": "https://github.com/Nehemie-Jacques/Exercice-node-JS#readme",
   "dependencies": {
     "body-parse": "^0.1.0",
+    "body-parser": "^2.2.0",
     "chalk": "^5.4.1",
     "express": "^5.1.0",
     "mariadb": "^3.4.1",
