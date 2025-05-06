@@ -13,23 +13,23 @@ app.get('/users', (req, res) => { // On définit une route HTTP GET appelée /us
             return res.status(500).json({ message: 'Erreur de lecture du fichier' }); // '500' signifie une erreur interne du serveur
         }
         const users = JSON.parse(data || '[]');  // On essaie de parser le contenu du fichier JSON. Si le fichier est vide, on initialise users à un tableau vide
-        res.status(200).json({ message: 'Données récupérées avec succès', users})
+        res.status(200).json({ message: 'Données récupérées avec succès', users })
     })
 })
 
 // Ajout d'un nouvel utilisateur
 app.post('/users', (req, res) => {
-    const { name, email, password} = req.body; // On extrait les données du corps de la requête
+    const { name, email, password } = req.body; // On extrait les données du corps de la requête
 
     if (!name || !email || !password) { // On vérifie si toutes les données nécessaires sont présentes
-        return res.status(400).json({ message: 'Données invalides'});
+        return res.status(400).json({ message: 'Données invalides' });
     }
 
     // On lit le fichier database.json pour récupérer les utilisateurs existants
     fs.readFile('./database.json', 'utf8', (err, data) => {
         if (err) return res.status(500).json({ message: 'Erreur interne' });
-        let users = JSON.parse(data || '[]'); 
-        users.push({ name, email, password}); // On ajoute le nouvel utilisateur au tableau
+        let users = JSON.parse(data || '[]');
+        users.push({ name, email, password }); // On ajoute le nouvel utilisateur au tableau
 
         fs.writeFile('./database.json', JSON.stringify(users, null, 2), 'utf-8', (err) => { // On écrit le tableau mis à jour dans le fichier database.json
             // JSON.stringify(users, null, 2) convertit le tableau d'utilisateurs en chaîne JSON formatée
@@ -37,32 +37,61 @@ app.post('/users', (req, res) => {
             // 'err' est une erreur qui peut se produire lors de l'écriture du fichier
             // 'users' est le tableau d'utilisateurs mis à jour
             // 'null' et '2' sont utilisés pour formater le JSON de manière lisible
-            if (err) return res.status(500).json({ message: 'Erreur d\'écriture'});
-        
-            res.status(201).json({ message: 'Utilisateur ajouté avec succès'})
+            if (err) return res.status(500).json({ message: 'Erreur d\'écriture' });
+
+            res.status(201).json({ message: 'Utilisateur ajouté avec succès' })
         });
-    }); 
+    });
 });
 
 // Suppression d'un utilisateur
-app.delete('/users/:email', (req, res) => { // On définit une route HTTP DELETE qui prend un paramètre d'URL :email
+app.delete('/delete/:email', (req, res) => { // On définit une route HTTP DELETE qui prend un paramètre d'URL :email
     // Le paramètre :email représente l'email de l'utilisateur à supprimer
     // On utilise req.params pour accéder aux paramètres de l'URL
     const email = req.params.email; // On récupère l'email de l'utilisateur à supprimer depuis les paramètres de la requête
-    
+
     // On lit le fichier database.json pour récupérer les utilisateurs existants
     fs.readFile('./database.json', 'utf8', (err, data) => {
-        if (err) throw err; 
+        if (err) throw err;
         let database = JSON.parse(data); // On parse le contenu du fichier JSON pour obtenir un tableau d'utilisateurs
         const newdatabase = database.filter(user => user.email !== email); // On filtre le tableau pour exclure l'utilisateur à supprimer
 
         if (newdatabase.length === database.length) { // Si la longueur du tableau filtré est égale à celle du tableau d'origine, cela signifie que l'utilisateur n'a pas été trouvé
-            return res.status(404).json({ message: 'Utilisateur non trouvé'});
+            return res.status(404).json({ message: 'Utilisateur non trouvé' });
         }
 
         fs.writeFile('./database.json', JSON.stringify(newdatabase), 'utf-8', (err) => {
-            if (err) throw err; 
-            res.status(200).json({ message: 'l\'utilisateur a été supprimé avec succès'});
+            if (err) throw err;
+            res.status(200).json({ message: 'l\'utilisateur a été supprimé avec succès' });
+        });
+    });
+});
+
+// Mise à jour d'un utilisateur
+app.put('/update/:email', (req, res) => { // On définit une route HTTP PUT qui prend un paramètre d'URL :email
+    const email = req.params.email; // On récupère l'email de l'utilisateur à mettre à jour depuis les paramètres de la requête
+    const { name, password } = req.body; // On extrait les nouvelles données du corps de la requête
+
+    if (!name || !password) { // On vérifie si toutes les données nécessaires sont présentes
+        return res.status(400).json({ message: "Nom et mot de passe requis" });
+    }
+
+    fs.readFile('./database.json', 'utf8', (err, data) => {
+        if (err) throw err;
+
+        let database = JSON.parse(data); // On parse le contenu du fichier JSON pour obtenir un tableau d'utilisateurs
+        let user = database.find(user => user.email === email); // On cherche l'utilisateur à mettre à jour dans le tableau
+
+        if (!user) { // Si l'utilisateur n'est pas trouvé, on renvoie une réponse 404
+            return res.status(404).json({ message: 'Utilisateur non trouvé' });
+        }
+
+        user.name = name; // On met à jour le nom de l'utilisateur
+        user.password = password; // On met à jour le mot de passe de l'utilisateur
+
+        fs.writeFile('./database.json', JSON.stringify(database), 'utf8', (err) => {
+            if (err) throw err;
+            res.status(200).json({ message: 'Utilisateur mis à jour avec succès' });
         });
     });
 });
